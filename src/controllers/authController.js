@@ -8,7 +8,18 @@ const generateToken = (userId) =>
     expiresIn: process.env.JWT_EXPIRES_IN || "7d"
   });
 
-export const register = async (req, res, next) => {
+export const getMe = async (req, res) => {
+  res.status(200).json({
+    success: true,
+    data: {
+      _id: req.user._id,
+      full_name: req.user.full_name,
+      email: req.user.email,
+      role: req.user.role
+    }
+  });
+};
+
   try {
     const { full_name, email, password } = req.body;
 
