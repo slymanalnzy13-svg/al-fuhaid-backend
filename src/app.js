@@ -6,6 +6,7 @@ import morgan from "morgan";
 import authRoutes from "./routes/authRoutes.js";
 import { apiLimiter } from "./middlewares/security.js";
 import personRoutes from "./routes/personRoutes.js";
+import ticketRoutes from "./routes/ticketRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
@@ -39,6 +40,7 @@ app.get("/health", (req, res) => {
 app.use("/auth", authRoutes);
 app.use("/persons", personRoutes);
 app.use("/users", userRoutes);
+app.use("/tickets", ticketRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
