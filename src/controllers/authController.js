@@ -20,6 +20,7 @@ export const getMe = async (req, res) => {
   });
 };
 
+export const register = async (req, res, next) => {
   try {
     const { full_name, email, password } = req.body;
 
