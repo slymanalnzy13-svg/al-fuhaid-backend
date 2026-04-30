@@ -111,6 +111,19 @@ export const closeTicket = async (req, res, next) => {
   }
 };
 
+/* ── Delete ticket permanently (admin only) ── */
+export const deleteTicket = async (req, res, next) => {
+  try {
+    const ticket = await Ticket.findByIdAndDelete(req.params.id);
+    if (!ticket) {
+      return res.status(404).json({ success: false, message: "التكت غير موجود" });
+    }
+    res.status(200).json({ success: true, message: "تم حذف التكت نهائياً" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 /* ── Reopen ticket (admin only) ── */
 export const reopenTicket = async (req, res, next) => {
   try {

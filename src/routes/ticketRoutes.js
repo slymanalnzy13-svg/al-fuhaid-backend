@@ -3,6 +3,7 @@ import express from "express";
 import {
   closeTicket,
   createTicket,
+  deleteTicket,
   getTicket,
   getTickets,
   reopenTicket,
@@ -18,5 +19,6 @@ router.get("/:id", protect, getTicket);
 router.post("/:id/reply", protect, replyToTicket);
 router.put("/:id/close", protect, requireAdmin, closeTicket);
 router.put("/:id/reopen", protect, requireAdmin, reopenTicket);
+router.delete("/:id", protect, requireAdmin, deleteTicket);
 
 export default router;
