@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "functions": {
+    "src/serverless.js": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [{ "src": "/(.*)", "dest": "src/serverless.js" }]
+}
