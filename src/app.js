@@ -12,20 +12,31 @@ import { errorHandler, notFoundHandler } from "./middlewares/errorHandler.js";
 
 const app = express();
 
+const normalizeOrigin = (value) => value.replace(/\/$/, "");
+
 const allowedOrigins = (process.env.CLIENT_URL || "")
   .split(",")
   .map((origin) => origin.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .map(normalizeOrigin);
+
+// Add Vercel deployment domain if not already present
+if (allowedOrigins.length === 0 || !allowedOrigins.some(o => o.includes("vercel.app"))) {
+  allowedOrigins.push("https://frontend-ivory-ten-72.vercel.app");
+}
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+      const normalizedOrigin = origin ? normalizeOrigin(origin) : origin;
+
+      if (!normalizedOrigin || allowedOrigins.length === 0 || allowedOrigins.includes(normalizedOrigin)) {
         return callback(null, true);
       }
 
       return callback(new Error("CORS blocked for this origin"));
-    }
+    },
+    credentials: true
   })
 );
 app.use(helmet());

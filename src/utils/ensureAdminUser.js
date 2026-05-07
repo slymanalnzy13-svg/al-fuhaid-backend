@@ -14,10 +14,31 @@ export const ensureAdminUser = async () => {
   const existing = await User.findOne({ email: adminEmail.toLowerCase() });
 
   if (existing) {
+    let shouldSave = false;
+
     if (existing.role !== "admin") {
       existing.role = "admin";
+      shouldSave = true;
+    }
+
+    if (existing.full_name !== adminFullName) {
+      existing.full_name = adminFullName;
+      shouldSave = true;
+    }
+
+    const hasStoredPassword = typeof existing.password === "string" && existing.password.length > 0;
+    const passwordMatches = hasStoredPassword
+      ? await bcrypt.compare(adminPassword, existing.password)
+      : false;
+    if (!passwordMatches) {
+      existing.password = await bcrypt.hash(adminPassword, 10);
+      shouldSave = true;
+    }
+
+    if (shouldSave) {
       await existing.save();
     }
+
     return existing;
   }
 
